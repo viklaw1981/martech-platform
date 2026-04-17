@@ -1388,7 +1388,7 @@ function scrollToBottom() {
 
 async function callClaude() {
   try {
-    const res = const res = await fetch('/.netlify/functions/claude', {
+    const res = await fetch('/.netlify/functions/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
