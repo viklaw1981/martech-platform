@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Martech Acquisition Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f4f3ef; --surface:#ffffff; --surface2:#f9f8f5;
+  --border:#e0ddd4; --border-hi:#c4c0b4;
+  --text:#17160f; --text2:#635f54; --text3:#a09b8e;
+  --purple:#4e40c4; --purple-bg:#eceafb; --purple-br:#bfb8f8; --purple-tx:#362d9a;
+  --teal:#0c7a56;  --teal-bg:#e3f4ec;   --teal-br:#96d4b8;   --teal-tx:#095c40;
+  --coral:#bf4424; --coral-bg:#fdecea;  --coral-br:#f4b09a;  --coral-tx:#962f18;
+  --blue:#1460b8;  --blue-bg:#e7f0fb;   --blue-br:#a4c4ee;   --blue-tx:#0e4a8e;
+  --amber:#956000; --amber-bg:#fdf2d8;  --amber-br:#ecc870;  --amber-tx:#714800;
+  --r:10px; --r-lg:14px;
+  --sh:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
+  --sh-hover:0 4px 14px rgba(0,0,0,.10),0 2px 4px rgba(0,0,0,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* ── OVERVIEW ── */
+#ov{max-width:760px;margin:0 auto;padding:0 24px 80px}
+
+.ov-head{padding:52px 0 28px;opacity:0;animation:up .5s .05s forwards}
+.eyebrow{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--purple);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--purple)}
+.ov-head h1{font-family:'Instrument Serif',serif;font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.14;color:var(--text);margin-bottom:10px}
+.ov-head h1 i{font-style:italic;color:var(--text2)}
+.ov-sub{font-size:14px;color:var(--text2);max-width:460px;line-height:1.75}
+
+.divider{height:1px;background:var(--border);margin:28px 0;opacity:0;animation:fade .4s .3s forwards}
+
+.flow{display:flex;flex-direction:column;gap:0;opacity:0;animation:up .5s .35s forwards}
+.layer{margin-bottom:2px}
+.layer-lbl{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row.center{justify-content:center}
+
+/* NODE */
+.node{flex:1;min-width:148px;border:1px solid var(--border);border-radius:var(--r);padding:13px 15px 12px;background:var(--surface);cursor:pointer;transition:box-shadow .16s,transform .12s,border-color .14s;position:relative;display:block;text-decoration:none;box-shadow:var(--sh)}
+.node:hover{transform:translateY(-2px);box-shadow:var(--sh-hover);border-color:var(--border-hi)}
+.node-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;padding-right:18px;line-height:1.3}
+.node-sub{font-size:11px;color:var(--text2);line-height:1.45}
+.node-arr{position:absolute;top:11px;right:11px;width:18px;height:18px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2);opacity:0;transition:opacity .14s}
+.node:hover .node-arr{opacity:1}
+
+.node.purple{background:var(--purple-bg);border-color:var(--purple-br)}.node.purple .node-title{color:var(--purple-tx)}.node.purple:hover{border-color:var(--purple)}
+.node.teal{background:var(--teal-bg);border-color:var(--teal-br)}.node.teal .node-title{color:var(--teal-tx)}.node.teal:hover{border-color:var(--teal)}
+.node.coral{background:var(--coral-bg);border-color:var(--coral-br)}.node.coral .node-title{color:var(--coral-tx)}.node.coral:hover{border-color:var(--coral)}
+.node.blue{background:var(--blue-bg);border-color:var(--blue-br)}.node.blue .node-title{color:var(--blue-tx)}.node.blue:hover{border-color:var(--blue)}
+.node.amber{background:var(--amber-bg);border-color:var(--amber-br)}.node.amber .node-title{color:var(--amber-tx)}.node.amber:hover{border-color:var(--amber)}
+.node.gray:hover{border-color:var(--border-hi);background:var(--surface2)}
+
+/* FUNNEL CARD */
+.fcard{width:100%;border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;background:var(--surface);cursor:pointer;transition:box-shadow .16s,transform .12s,border-color .14s;position:relative;display:block;text-decoration:none;box-shadow:var(--sh)}
+.fcard:hover{transform:translateY(-2px);box-shadow:var(--sh-hover)}
+.fcard-step{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.fcard-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;padding-right:20px;line-height:1.3}
+.fcard-desc{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:10px}
+.fcard-tags{display:flex;flex-wrap:wrap;gap:5px}
+.ftag{font-size:11px;font-family:'DM Mono',monospace;padding:2px 9px;border-radius:20px;border:1px solid}
+.fcard-arr{position:absolute;top:14px;right:14px;font-size:11px;color:var(--text3);opacity:0;transition:opacity .14s}
+.fcard:hover .fcard-arr{opacity:1}
+
+.fcard.coral{background:var(--coral-bg);border-color:var(--coral-br)}.fcard.coral .fcard-title{color:var(--coral-tx)}.fcard.coral:hover{border-color:var(--coral)}
+.fcard.coral .ftag{border-color:var(--coral-br);color:var(--coral-tx);background:rgba(191,68,36,.06)}
+.fcard.blue{background:var(--blue-bg);border-color:var(--blue-br)}.fcard.blue .fcard-title{color:var(--blue-tx)}.fcard.blue:hover{border-color:var(--blue)}
+.fcard.blue .ftag{border-color:var(--blue-br);color:var(--blue-tx);background:rgba(20,96,184,.06)}
+
+/* CONNECTORS */
+.conn{display:flex;justify-content:center;height:20px;align-items:flex-end}
+.conn-v{width:1px;height:16px;background:var(--border-hi)}
+.split{position:relative;height:26px}
+.split .sv{position:absolute;top:0;left:50%;width:1px;height:13px;background:var(--border-hi)}
+.split .sh{position:absolute;top:13px;left:25%;right:25%;height:1px;background:var(--border-hi)}
+.split .sl{position:absolute;top:13px;left:25%;width:1px;height:13px;background:var(--border-hi)}
+.split .sr{position:absolute;top:13px;right:25%;width:1px;height:13px;background:var(--border-hi)}
+
+.step-div{display:flex;align-items:center;gap:10px;padding:7px 0}
+.step-div-line{flex:1;height:1px;background:var(--border)}
+.step-div-txt{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.08em;white-space:nowrap}
+
+.feedback{display:flex;align-items:center;justify-content:center;gap:10px;padding:8px 0 4px;margin-top:2px}
+.fb-l{flex:1;max-width:130px;height:1px;background:linear-gradient(to right,transparent,var(--purple-br))}
+.fb-r{flex:1;max-width:130px;height:1px;background:linear-gradient(to left,transparent,var(--purple-br))}
+.fb-txt{font-family:'DM Mono',monospace;font-size:10px;color:var(--purple);letter-spacing:.07em;white-space:nowrap;font-weight:500}
+
+/* COMPLIANCE */
+.compliance{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--amber-br);border-radius:var(--r);padding:12px 15px;background:var(--amber-bg);cursor:pointer;transition:box-shadow .16s,transform .12s,border-color .14s;text-decoration:none;margin-top:8px;box-shadow:var(--sh)}
+.compliance:hover{transform:translateY(-2px);box-shadow:var(--sh-hover);border-color:var(--amber)}
+.comp-left{display:flex;align-items:center;gap:11px}
+.comp-icon{width:28px;height:28px;border:1px solid var(--amber-br);border-radius:6px;background:rgba(149,96,0,.07);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.comp-icon svg{width:13px;height:13px;stroke:var(--amber);fill:none;stroke-width:1.5;stroke-linecap:round}
+.comp-title{font-size:13px;font-weight:500;color:var(--amber-tx)}
+.comp-sub{font-size:11px;color:var(--text2);margin-top:1px}
+.comp-arr{font-size:11px;color:var(--text3);opacity:0;transition:opacity .14s}
+.compliance:hover .comp-arr{opacity:1}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);opacity:0;animation:fade .4s .85s forwards}
+.leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+.leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+.pfoot{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;opacity:0;animation:fade .4s 1s forwards}
+.pfoot p{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
+.vbadge{font-size:10px;font-family:'DM Mono',monospace;padding:2px 9px;border-radius:20px;border:1px solid var(--border);color:var(--text3)}
+
+/* ── DETAIL PAGE ── */
+#dp{background:var(--bg)}
+
+.dp-nav{position:sticky;top:0;z-index:100;background:rgba(244,243,239,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 32px;height:52px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.dp-back{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;padding:0;transition:color .14s;font-family:'DM Sans',sans-serif}
+.dp-back:hover{color:var(--text)}
+.dp-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dp-crumb{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
+
+.dp-hero{max-width:840px;margin:0 auto;padding:48px 32px 36px;border-bottom:1px solid var(--border)}
+.dp-tag{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.11em;text-transform:uppercase;padding:3px 11px;border-radius:20px;display:inline-block;margin-bottom:14px;border:1px solid}
+.dp-tag.purple{background:var(--purple-bg);color:var(--purple-tx);border-color:var(--purple-br)}
+.dp-tag.teal{background:var(--teal-bg);color:var(--teal-tx);border-color:var(--teal-br)}
+.dp-tag.coral{background:var(--coral-bg);color:var(--coral-tx);border-color:var(--coral-br)}
+.dp-tag.blue{background:var(--blue-bg);color:var(--blue-tx);border-color:var(--blue-br)}
+.dp-tag.amber{background:var(--amber-bg);color:var(--amber-tx);border-color:var(--amber-br)}
+.dp-tag.gray{background:var(--surface2);color:var(--text2);border-color:var(--border)}
+.dp-hero h2{font-family:'Instrument Serif',serif;font-size:clamp(24px,3.5vw,36px);font-weight:400;line-height:1.15;color:var(--text);margin-bottom:10px}
+.dp-hero-sub{font-size:15px;color:var(--text2);max-width:580px;line-height:1.8}
+
+.dp-body{max-width:840px;margin:0 auto;padding:36px 32px 56px;display:grid;grid-template-columns:1fr 1fr;gap:36px}
+.dp-body.single{grid-template-columns:1fr;max-width:620px}
+
+.dp-sec-title{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.dp-desc{font-size:14px;color:var(--text2);line-height:1.8}
+.dp-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+.dp-list li{font-size:13px;color:var(--text2);padding-left:18px;position:relative;line-height:1.6}
+.dp-list li::before{content:'→';position:absolute;left:0;font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);top:3px}
+.dp-list li strong{color:var(--text);font-weight:500}
+.dp-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.dp-pill{font-size:11px;font-family:'DM Mono',monospace;padding:3px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text2);background:var(--surface)}
+.dp-note{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-top:16px}
+.dp-note-lbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.dp-note p{font-size:13px;color:var(--text2);line-height:1.75}
+.dp-sp{margin-top:18px}
+.dp-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.dp-metric{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.dp-metric-val{font-family:'Instrument Serif',serif;font-size:28px;color:var(--text);line-height:1}
+.dp-metric-lbl{font-size:11px;color:var(--text3);margin-top:4px}
+
+.dp-conns{max-width:840px;margin:0 auto;padding:14px 32px 24px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dp-conn-lbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.09em;text-transform:uppercase;margin-right:4px}
+.dp-conn-pill{font-size:12px;padding:3px 11px;border-radius:20px;border:1px solid var(--border);color:var(--text2);background:var(--surface);cursor:default}
+
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── TOP NAV ── */
+#top-nav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(244,243,239,.96);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:0 32px;height:50px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.tnav-logo{font-family:'Instrument Serif',serif;font-size:15px;color:var(--text);font-weight:400;white-space:nowrap}
+.tnav-logo span{color:var(--text3);font-style:italic}
+.tnav-tabs{display:flex;gap:2px}
+.tnav-tab{
+  font-size:12px;font-weight:500;color:var(--text2);
+  padding:5px 13px;border-radius:6px;cursor:pointer;
+  border:none;background:none;font-family:'DM Sans',sans-serif;
+  transition:background .13s,color .13s;
+  white-space:nowrap;
+}
+.tnav-tab:hover{background:var(--surface2);color:var(--text)}
+.tnav-tab.active{background:var(--surface);color:var(--text);box-shadow:var(--sh)}
+
+/* ── COVER PAGE ── */
+#cover{max-width:820px;margin:0 auto;padding:0 32px 100px}
+
+.cover-hero{
+  padding:72px 0 56px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:56px;
+}
+.cover-hero .eyebrow{opacity:0;animation:fadeUp .5s .1s forwards}
+.cover-hero h1{
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(34px,5vw,56px);
+  font-weight:400;line-height:1.1;
+  color:var(--text);margin-bottom:20px;
+  opacity:0;animation:fadeUp .6s .2s forwards;
+}
+.cover-hero h1 i{font-style:italic;color:var(--text2)}
+.cover-hero-sub{
+  font-size:16px;color:var(--text2);
+  max-width:560px;line-height:1.8;
+  opacity:0;animation:fadeUp .6s .3s forwards;
+}
+
+/* PROBLEM / SOLUTION CARDS */
+.cover-cards{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin-bottom:56px;
+  opacity:0;animation:fadeUp .6s .4s forwards;
+}
+.cover-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:22px 24px;
+  box-shadow:var(--sh);
+}
+.cover-card-label{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.cover-card-label.problem{color:var(--coral-tx)}
+.cover-card-label.solution{color:var(--teal-tx)}
+.cover-card h3{font-size:15px;font-weight:500;color:var(--text);margin-bottom:8px;line-height:1.3}
+.cover-card p{font-size:13px;color:var(--text2);line-height:1.75}
+
+/* MENTAL MODEL DIAGRAM */
+.mental-model{
+  margin-bottom:56px;
+  opacity:0;animation:fadeUp .6s .5s forwards;
+}
+.mm-label{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--text3);
+  margin-bottom:16px;
+}
+.mm-diagram{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:28px 24px;
+  box-shadow:var(--sh);
+}
+.mm-flow{display:flex;align-items:center;gap:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+.mm-step{
+  flex:1;min-width:100px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  text-align:center;
+  cursor:pointer;
+  transition:transform .12s;
+}
+.mm-step:hover{transform:translateY(-2px)}
+.mm-bubble{
+  width:48px;height:48px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid;
+  font-size:18px;
+  transition:transform .12s;
+  flex-shrink:0;
+}
+.mm-step-name{font-size:11px;font-weight:500;color:var(--text);line-height:1.3}
+.mm-step-sub{font-size:10px;color:var(--text2);line-height:1.3}
+.mm-arrow{
+  font-size:16px;color:var(--border-hi);
+  flex-shrink:0;padding:0 4px;
+  margin-bottom:18px;
+}
+.mm-loop-note{
+  margin-top:18px;padding-top:16px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.mm-loop-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--purple-br))}
+.mm-loop-line.r{background:linear-gradient(to left,transparent,var(--purple-br))}
+.mm-loop-txt{font-family:'DM Mono',monospace;font-size:10px;color:var(--purple);letter-spacing:.07em;white-space:nowrap;font-weight:500}
+
+/* PRINCIPLES */
+.cover-principles{
+  margin-bottom:56px;
+  opacity:0;animation:fadeUp .6s .6s forwards;
+}
+.principles-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.principle{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 18px;
+}
+.principle-num{
+  font-family:'DM Mono',monospace;font-size:11px;
+  color:var(--purple);font-weight:500;margin-bottom:6px;
+}
+.principle h4{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px;line-height:1.3}
+.principle p{font-size:12px;color:var(--text2);line-height:1.65}
+
+/* CTA ROW */
+.cover-cta{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .5s .7s forwards;
+}
+.btn-primary{
+  display:flex;align-items:center;gap:7px;
+  background:var(--purple);color:#fff;
+  border:none;border-radius:var(--r);
+  padding:11px 20px;font-size:13px;font-weight:500;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:background .13s,transform .1s;
+  box-shadow:0 2px 8px rgba(78,64,196,.25);
+}
+.btn-primary:hover{background:#3d32a8;transform:translateY(-1px)}
+.btn-secondary{
+  display:flex;align-items:center;gap:7px;
+  background:var(--surface);color:var(--text2);
+  border:1px solid var(--border);border-radius:var(--r);
+  padding:11px 20px;font-size:13px;font-weight:500;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  transition:background .13s,border-color .13s,color .13s;
+  box-shadow:var(--sh);
+}
+.btn-secondary:hover{background:var(--surface2);border-color:var(--border-hi);color:var(--text)}
+
+/* ── PHASES PAGE ── */
+#phases{max-width:820px;margin:0 auto;padding:0 32px 100px}
+
+.phases-head{padding:52px 0 32px;opacity:0;animation:fadeUp .5s .1s forwards}
+.phases-head h2{font-family:'Instrument Serif',serif;font-size:clamp(26px,3.5vw,38px);font-weight:400;color:var(--text);margin-bottom:10px;line-height:1.15}
+.phases-head p{font-size:14px;color:var(--text2);max-width:520px;line-height:1.75}
+
+.phases-list{display:flex;flex-direction:column;gap:0;opacity:0;animation:fadeUp .5s .25s forwards}
+
+.phase-item{
+  display:grid;grid-template-columns:52px 1fr;gap:0;
+  position:relative;
+}
+.phase-item:not(:last-child) .phase-line{
+  position:absolute;left:24px;top:52px;bottom:0;
+  width:1px;background:var(--border);
+}
+.phase-left{display:flex;flex-direction:column;align-items:center;padding-top:14px}
+.phase-num{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:500;
+  color:var(--text2);flex-shrink:0;box-shadow:var(--sh);
+  position:relative;z-index:1;
+}
+.phase-num.active-phase{background:var(--purple-bg);border-color:var(--purple-br);color:var(--purple-tx)}
+.phase-right{padding:12px 0 36px 20px}
+.phase-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.phase-title{font-size:16px;font-weight:500;color:var(--text);line-height:1.3}
+.phase-duration{
+  font-family:'DM Mono',monospace;font-size:10px;
+  padding:3px 9px;border-radius:20px;
+  border:1px solid var(--border);color:var(--text3);
+  background:var(--surface);white-space:nowrap;
+  flex-shrink:0;
+}
+.phase-desc{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:12px;max-width:580px}
+.phase-deliverables{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.phase-tag{
+  font-size:11px;font-family:'DM Mono',monospace;
+  padding:3px 10px;border-radius:20px;
+  border:1px solid var(--border);
+  color:var(--text2);background:var(--surface);
+}
+.phase-tag.purple{background:var(--purple-bg);border-color:var(--purple-br);color:var(--purple-tx)}
+.phase-tag.teal{background:var(--teal-bg);border-color:var(--teal-br);color:var(--teal-tx)}
+.phase-tag.coral{background:var(--coral-bg);border-color:var(--coral-br);color:var(--coral-tx)}
+.phase-tag.blue{background:var(--blue-bg);border-color:var(--blue-br);color:var(--blue-tx)}
+.phase-tag.amber{background:var(--amber-bg);border-color:var(--amber-br);color:var(--amber-tx)}
+.phase-outcome{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r);padding:10px 14px;
+  font-size:12px;color:var(--text2);line-height:1.65;
+}
+.phase-outcome strong{color:var(--text);font-weight:500}
+
+.phases-footer{
+  margin-top:40px;padding:20px 24px;
+  background:var(--purple-bg);border:1px solid var(--purple-br);
+  border-radius:var(--r-lg);
+  opacity:0;animation:fadeUp .5s .4s forwards;
+}
+.phases-footer h4{font-size:14px;font-weight:500;color:var(--purple-tx);margin-bottom:6px}
+.phases-footer p{font-size:13px;color:var(--text2);line-height:1.75}
+
+/* Webflow section */
+.webflow-section{
+  margin-top:48px;padding-top:40px;
+  border-top:1px solid var(--border);
+  opacity:0;animation:fadeUp .5s .5s forwards;
+}
+.webflow-section h3{font-family:'Instrument Serif',serif;font-size:22px;font-weight:400;color:var(--text);margin-bottom:8px}
+.webflow-section > p{font-size:13px;color:var(--text2);line-height:1.75;max-width:580px;margin-bottom:20px}
+.webflow-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh)}
+.wf-card-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.wf-card-label.works{color:var(--teal-tx)}
+.wf-card-label.limits{color:var(--coral-tx)}
+.wf-card h4{font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px}
+.wf-card ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.wf-card ul li{font-size:12px;color:var(--text2);padding-left:14px;position:relative;line-height:1.5}
+.wf-card ul li::before{content:'→';position:absolute;left:0;font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);top:2px}
+.wf-rec{
+  margin-top:12px;padding:12px 16px;
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--r);font-size:12px;color:var(--text2);line-height:1.7;
+  grid-column:1/-1;
+}
+.wf-rec strong{color:var(--text);font-weight:500}
+
+@media(max-width:600px){
+  #ov{padding:0 16px 60px}
+  #cover{padding:0 16px 80px}
+  #phases{padding:0 16px 80px}
+  .dp-hero{padding:28px 16px 24px}
+  .dp-body{padding:24px 16px 48px;grid-template-columns:1fr}
+  .dp-nav{padding:0 16px}
+  .dp-conns{padding:12px 16px 24px}
+  .node{min-width:130px}
+  .cover-cards{grid-template-columns:1fr}
+  .principles-grid{grid-template-columns:1fr}
+  .webflow-grid{grid-template-columns:1fr}
+  #top-nav{padding:0 16px}
+  .tnav-logo{display:none}
+  .mm-flow{gap:0}
+  .mm-step-sub{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav id="top-nav">
+  <div class="tnav-logo">Martech Platform <span>· Architecture</span></div>
+  <div class="tnav-tabs">
+    <button class="tnav-tab active" onclick="switchPage('cover')">Overview</button>
+    <button class="tnav-tab" onclick="switchPage('ov')">Architecture</button>
+    <button class="tnav-tab" onclick="switchPage('phases')">Phases &amp; Integration</button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════
+     COVER PAGE
+════════════════════════════════════════ -->
+<div id="cover" class="page active">
+<div class="cover-hero">
+  <div class="eyebrow">Life insurance · Acquisition platform</div>
+  <h1>A martech stack that gets<br><i>smarter with every lead</i></h1>
+  <p class="cover-hero-sub">This document describes the architecture for a closed-loop acquisition platform — a system where every lead that converts into a policy teaches the system how to find better leads. Unlike traditional martech stacks that optimize for clicks and form fills, this one optimizes for issued policies and lifetime value.</p>
+</div>
+
+<div class="cover-cards">
+  <div class="cover-card">
+    <div class="cover-card-label problem">The problem today</div>
+    <h3>We're optimizing for the wrong thing</h3>
+    <p>Most acquisition stacks optimize for cost-per-lead. Meta and Google learn to find people who click ads and fill out forms. But clicks and form fills don't pay premiums — policies do. The gap between lead volume and issued policies represents the core inefficiency this platform is designed to close.</p>
+  </div>
+  <div class="cover-card">
+    <div class="cover-card-label solution">What this platform does</div>
+    <h3>Closes the loop on what actually matters</h3>
+    <p>By feeding policy outcomes — bind rate, issued premium, LTV — back into every layer of the acquisition stack, the system continuously learns which channels, creatives, demographics, and behaviors actually predict a customer who buys and keeps a policy. Every lead makes the next lead cheaper and better.</p>
+  </div>
+</div>
+
+<div class="mental-model">
+  <div class="mm-label">How it works — the big picture</div>
+  <div class="mm-diagram">
+    <div class="mm-flow">
+      <div class="mm-step" onclick="switchPage('ov')">
+        <div class="mm-bubble" style="background:var(--surface2);border-color:var(--border)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="1.5" stroke-linecap="round"><ellipse cx="12" cy="12" rx="10" ry="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="mm-step-name">Data</div>
+        <div class="mm-step-sub">Unify + resolve identity</div>
+      </div>
+      <div class="mm-arrow">→</div>
+      <div class="mm-step" onclick="switchPage('ov')">
+        <div class="mm-bubble" style="background:var(--purple-bg);border-color:var(--purple-br)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5" stroke-linecap="round"><path d="M12 2a7 7 0 0 1 7 7c0 4-3 6-4 8H9c-1-2-4-4-4-8a7 7 0 0 1 7-7z"/><path d="M9 17h6"/><path d="M9.5 21h5"/></svg>
+        </div>
+        <div class="mm-step-name">Cerebro</div>
+        <div class="mm-step-sub">Score + predict every lead</div>
+      </div>
+      <div class="mm-arrow">→</div>
+      <div class="mm-step" onclick="switchPage('ov')">
+        <div class="mm-bubble" style="background:var(--teal-bg);border-color:var(--teal-br)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"><path d="M17 20h5v-2a3 3 0 0 0-5.356-1.857"/><path d="M9 20H4v-2a3 3 0 0 1 5.356-1.857"/><circle cx="12" cy="7" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+        </div>
+        <div class="mm-step-name">Traffic</div>
+        <div class="mm-step-sub">Affiliate + paid, optimized</div>
+      </div>
+      <div class="mm-arrow">→</div>
+      <div class="mm-step" onclick="switchPage('ov')">
+        <div class="mm-bubble" style="background:var(--coral-bg);border-color:var(--coral-br)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--coral)" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M3 9h18"/><path d="M9 21l3-4 3 4"/></svg>
+        </div>
+        <div class="mm-step-name">Funnel</div>
+        <div class="mm-step-sub">Dynamic page + form</div>
+      </div>
+      <div class="mm-arrow">→</div>
+      <div class="mm-step" onclick="switchPage('ov')">
+        <div class="mm-bubble" style="background:var(--blue-bg);border-color:var(--blue-br)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="mm-step-name">Convert</div>
+        <div class="mm-step-sub">Lead → policy issued</div>
+      </div>
+    </div>
+    <div class="mm-loop-note">
+      <div class="mm-loop-line"></div>
+      <div class="mm-loop-txt">↺ &nbsp;policy outcomes feed back to improve every prior step</div>
+      <div class="mm-loop-line r"></div>
+    </div>
+  </div>
+</div>
+
+<div class="cover-principles">
+  <div class="mm-label">Three design principles</div>
+  <div class="principles-grid">
+    <div class="principle">
+      <div class="principle-num">01</div>
+      <h4>Optimize for LTV, not leads</h4>
+      <p>Every decision in the stack — bids, affiliate payouts, form length — is calibrated against issued premium and lifetime value, not cost-per-lead or click-through rate.</p>
+    </div>
+    <div class="principle">
+      <div class="principle-num">02</div>
+      <h4>The system learns continuously</h4>
+      <p>Policy outcomes loop back to the intelligence layer. The longer the platform runs, the more precisely it can identify which signals predict high-value customers.</p>
+    </div>
+    <div class="principle">
+      <div class="principle-num">03</div>
+      <h4>Personalization at every step</h4>
+      <p>From the first ad impression to the final form field, every interaction adapts to what's already known about the lead — reducing friction and improving conversion without compromising underwriting data quality.</p>
+    </div>
+  </div>
+</div>
+
+<div class="cover-cta">
+  <button class="btn-primary" onclick="switchPage('ov')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Explore the architecture
+  </button>
+  <button class="btn-secondary" onclick="switchPage('phases')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    View implementation phases
+  </button>
+</div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     PHASES PAGE
+════════════════════════════════════════ -->
+<div id="phases" class="page">
+<div class="phases-head">
+  <h2>Implementation phases<br><i style="color:var(--text2)">& Webflow integration</i></h2>
+  <p>The platform is designed to be built in four phases, each delivering standalone value while laying the foundation for the next. Nothing is built for future phases that doesn't earn its keep in the current one.</p>
+</div>
+
+<div class="phases-list">
+
+  <div class="phase-item">
+    <div class="phase-line"></div>
+    <div class="phase-left"><div class="phase-num active-phase">1</div></div>
+    <div class="phase-right">
+      <div class="phase-header">
+        <div class="phase-title">Foundation — data, scoring, and traffic controls</div>
+        <div class="phase-duration">Weeks 1–10</div>
+      </div>
+      <p class="phase-desc">Build the core intelligence loop at low fidelity. A basic Cerebro model (even rule-based scoring is fine to start), the data layer for identity resolution, Apollo with static RPL tiers, and the bidding engine with manually configured bid modifiers. The feedback loop starts collecting outcome data immediately, so the model has training data ready for Phase 3.</p>
+      <div class="phase-deliverables">
+        <span class="phase-tag">Data layer + identity resolution</span>
+        <span class="phase-tag purple">Cerebro v1 — rule-based scoring</span>
+        <span class="phase-tag teal">Apollo + static RPL tiers</span>
+        <span class="phase-tag teal">Bidding engine + manual modifiers</span>
+        <span class="phase-tag">LMS integration + outcome tracking</span>
+      </div>
+      <div class="phase-outcome"><strong>What you can do after Phase 1:</strong> Route affiliate payouts based on lead quality signals. Start capturing the outcome data Cerebro will train on. Have a working closed loop, even if the intelligence is basic.</div>
+    </div>
+  </div>
+
+  <div class="phase-item">
+    <div class="phase-line"></div>
+    <div class="phase-left"><div class="phase-num">2</div></div>
+    <div class="phase-right">
+      <div class="phase-header">
+        <div class="phase-title">Funnel — dynamic landing page and form</div>
+        <div class="phase-duration">Weeks 6–16 (parallel with Phase 1)</div>
+      </div>
+      <p class="phase-desc">Build the two-step conversion funnel. The dynamic landing page with AI-generated content variants, bounce management, and retargeting pixels. The dynamic form with basic personalization from Cerebro scores and Apollo context. This is where you see conversion lift — and where the system starts generating the behavioral data the intelligence layer needs.</p>
+      <div class="phase-deliverables">
+        <span class="phase-tag coral">Dynamic landing page + AI content</span>
+        <span class="phase-tag coral">Bounce management + retargeting pixels</span>
+        <span class="phase-tag blue">Dynamic form + basic personalization</span>
+        <span class="phase-tag">NLP call center pipeline (Data Works)</span>
+      </div>
+      <div class="phase-outcome"><strong>What you can do after Phase 2:</strong> Run a fully personalized two-step funnel. A/B test page variants. Retarget non-converters. Form adapts to basic Cerebro score tiers.</div>
+    </div>
+  </div>
+
+  <div class="phase-item">
+    <div class="phase-line"></div>
+    <div class="phase-left"><div class="phase-num">3</div></div>
+    <div class="phase-right">
+      <div class="phase-header">
+        <div class="phase-title">Intelligence — Cerebro retraining and automation</div>
+        <div class="phase-duration">Weeks 14–22</div>
+      </div>
+      <p class="phase-desc">Cerebro graduates from rule-based scoring to a trained predictive model, using the outcome data collected in Phases 1 and 2. The multi-armed bandit replaces manual A/B testing. Apollo's RPL becomes continuously variable rather than tiered. The system starts compounding — each optimization cycle improves the next one.</p>
+      <div class="phase-deliverables">
+        <span class="phase-tag purple">Cerebro v2 — trained ML model</span>
+        <span class="phase-tag coral">Multi-armed bandit A/B automation</span>
+        <span class="phase-tag teal">Dynamic RPL in Apollo (continuous)</span>
+        <span class="phase-tag">Full personalization engine</span>
+      </div>
+      <div class="phase-outcome"><strong>What you can do after Phase 3:</strong> The system is fully self-optimizing. Bid modifiers, affiliate payouts, page variants, and form personalization all update automatically based on real outcome data.</div>
+    </div>
+  </div>
+
+  <div class="phase-item">
+    <div class="phase-left"><div class="phase-num">4</div></div>
+    <div class="phase-right">
+      <div class="phase-header">
+        <div class="phase-title">Advanced loop — offline sync, compliance, and identity at scale</div>
+        <div class="phase-duration">Weeks 20–28</div>
+      </div>
+      <p class="phase-desc">Close the loop with the ad platforms directly. Offline conversion sync (Meta CAPI + Google Enhanced Conversions) teaches Meta and Google to optimize for issued policies, not just form fills. Compliance automation ensures TCPA consent, CCPA data handling, and model fairness are systematically enforced rather than manually checked. Identity resolution scales to handle full cross-channel deduplication.</p>
+      <div class="phase-deliverables">
+        <span class="phase-tag amber">Offline conversion sync — Meta CAPI</span>
+        <span class="phase-tag amber">Google Enhanced Conversions</span>
+        <span class="phase-tag amber">Value-based bidding (ROAS)</span>
+        <span class="phase-tag amber">Compliance automation layer</span>
+        <span class="phase-tag">Full identity graph at scale</span>
+      </div>
+      <div class="phase-outcome"><strong>What you can do after Phase 4:</strong> Ad platforms optimize for issued premium, not clicks. TCPA/CCPA compliance is systematic. The full closed loop is running — every policy issued improves every future acquisition decision across every channel.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="phases-footer">
+  <h4>On not making this a lifelong project</h4>
+  <p>Phase 1 + Phase 2 together are the minimum viable platform — a working funnel with basic intelligence and a functioning feedback loop. That's 16 weeks of focused build. Phases 3 and 4 are compounding improvements, not prerequisites. The temptation to over-engineer Phase 1 (perfect identity resolution, fully trained ML model, complete compliance framework) is the most common reason these projects stall. Ship a working loop first. The data it collects makes everything in Phases 3 and 4 significantly better.</p>
+</div>
+
+<div class="webflow-section">
+  <h3>Webflow integration</h3>
+  <p>Webflow works well for some parts of this stack and hits hard limits on others. The key is knowing which layer owns what.</p>
+  <div class="webflow-grid">
+    <div class="wf-card">
+      <div class="wf-card-label works">Works well in Webflow</div>
+      <h4>Landing page shell + brand</h4>
+      <ul>
+        <li>Page layout, typography, and brand design</li>
+        <li>CMS collections for content variant management</li>
+        <li>Conditional visibility via Webflow interactions (reads URL params / cookies set by Cerebro upstream)</li>
+        <li>Pixel and script injection via custom code head/body</li>
+        <li>Bounce management scripts (injected as custom code)</li>
+        <li>A/B testing via injected third-party tool (Convert.com, VWO)</li>
+      </ul>
+    </div>
+    <div class="wf-card">
+      <div class="wf-card-label limits">Webflow's hard limits</div>
+      <h4>Dynamic form (step 2)</h4>
+      <ul>
+        <li>Webflow forms are static — no conditional branching</li>
+        <li>No field pre-population from external APIs at render time</li>
+        <li>No programmatic field order changes based on Cerebro score</li>
+        <li>No server-side logic for form assembly</li>
+      </ul>
+    </div>
+    <div class="wf-rec">
+      <strong>Recommended approach:</strong> Use Webflow for the landing page shell and brand layer. Move the form (step 2) to a custom-coded component — either an embedded React/Vue app hosted on a subdomain, or a configurable form builder like Typeform or a custom implementation. Cerebro signals travel via URL parameters and first-party cookies set at the traffic acquisition layer. Webflow reads these to personalize the landing page; the form component reads them to personalize the survey. The intelligence layer (Cerebro, Apollo, bidding engine) lives entirely outside Webflow and communicates through APIs — Webflow is the front-end renderer, not the logic layer.
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- OVERVIEW -->
+<div id="ov" class="page">
+<div class="ov-head">
+  <div class="eyebrow">Architecture · component map</div>
+  <h1>Platform architecture<br><i>Click any component to explore</i></h1>
+  <p class="ov-sub">Each component links to a detailed breakdown of its role, inputs, outputs, and connections. The funnel is a two-step sequence — dynamic landing page then personalized form.</p>
+</div>
+<div class="divider"></div>
+<div class="flow">
+
+  <div class="layer">
+    <div class="layer-lbl">Data layer</div>
+    <div class="row">
+      <div class="node gray" onclick="nav('datalayer')">
+        <div class="node-title">Data layer &amp; identity resolution</div>
+        <div class="node-sub">Unifies customer records, sessions, and ad signals before scoring</div>
+        <span class="node-arr">↗</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn"><div class="conn-v"></div></div>
+
+  <div class="layer">
+    <div class="layer-lbl">Intelligence</div>
+    <div class="row center">
+      <div class="node purple" style="max-width:360px" onclick="nav('cerebro')">
+        <div class="node-title">Cerebro — lead scoring + segmentation</div>
+        <div class="node-sub">Predictive model · LTV estimation · signal fusion</div>
+        <span class="node-arr">↗</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="split"><div class="sv"></div><div class="sh"></div><div class="sl"></div><div class="sr"></div></div>
+
+  <div class="layer">
+    <div class="layer-lbl">Traffic acquisition</div>
+    <div class="row">
+      <div class="node teal" onclick="nav('apollo')">
+        <div class="node-title">Apollo</div>
+        <div class="node-sub">Affiliate mgmt · dynamic RPL by variable</div>
+        <span class="node-arr">↗</span>
+      </div>
+      <div class="node teal" onclick="nav('bidding')">
+        <div class="node-title">Bidding engine</div>
+        <div class="node-sub">Per-platform bid modifiers</div>
+        <span class="node-arr">↗</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn"><div class="conn-v"></div></div>
+
+  <div class="layer">
+    <div class="layer-lbl">Traffic channels</div>
+    <div class="row">
+      <div class="node gray" onclick="nav('affiliate')">
+        <div class="node-title">Affiliate channels</div>
+        <div class="node-sub">RPL-incentivized partners</div>
+        <span class="node-arr">↗</span>
+      </div>
+      <div class="node gray" onclick="nav('paid')">
+        <div class="node-title">Paid + owned channels</div>
+        <div class="node-sub">Google · Meta · Native · Social</div>
+        <span class="node-arr">↗</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn"><div class="conn-v"></div></div>
+
+  <div class="layer">
+    <div class="fcard coral" onclick="nav('landing')">
+      <span class="fcard-arr">↗</span>
+      <div class="fcard-step">Funnel · step 1</div>
+      <div class="fcard-title">Dynamic landing page</div>
+      <div class="fcard-desc">AI-assembled brochureware, personalized to the visitor. Single CTA: "Get Quote."</div>
+      <div class="fcard-tags">
+        <span class="ftag">AI content</span><span class="ftag">A/B bandit</span><span class="ftag">bounce management</span><span class="ftag">retargeting pixels</span><span class="ftag">personalization</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-div">
+    <div class="step-div-line"></div>
+    <div class="step-div-txt">click "get quote"</div>
+    <div class="step-div-line"></div>
+  </div>
+
+  <div class="layer">
+    <div class="fcard blue" onclick="nav('form')">
+      <span class="fcard-arr">↗</span>
+      <div class="fcard-step">Funnel · step 2</div>
+      <div class="fcard-title">Dynamic form</div>
+      <div class="fcard-desc">Personalized survey assembled at render time from Cerebro score, Apollo context, and session behavior.</div>
+      <div class="fcard-tags">
+        <span class="ftag">Cerebro score</span><span class="ftag">Apollo context</span><span class="ftag">pre-population</span><span class="ftag">conditional branching</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn"><div class="conn-v"></div></div>
+
+  <div class="layer">
+    <div class="layer-lbl">Conversion + feedback</div>
+    <div class="row">
+      <div class="node blue" onclick="nav('lms')">
+        <div class="node-title">Lead management system</div>
+        <div class="node-sub">Routing · workflows · policy conversion</div>
+        <span class="node-arr">↗</span>
+      </div>
+      <div class="node amber" onclick="nav('offlineconv')">
+        <div class="node-title">Offline conversion sync</div>
+        <div class="node-sub">Policy outcomes → Meta CAPI · Google</div>
+        <span class="node-arr">↗</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback">
+    <div class="fb-l"></div>
+    <div class="fb-txt">↺ &nbsp;LTV + bind outcomes → Cerebro + ad platforms</div>
+    <div class="fb-r"></div>
+  </div>
+
+  <a class="compliance" onclick="nav('compliance')">
+    <div class="comp-left">
+      <div class="comp-icon"><svg viewBox="0 0 16 16"><path d="M8 2L3 5v4c0 3 2.5 5 5 5s5-2 5-5V5L8 2z"/></svg></div>
+      <div>
+        <div class="comp-title">Compliance &amp; governance</div>
+        <div class="comp-sub">TCPA · CCPA · ad compliance · model fairness · disclosure</div>
+      </div>
+    </div>
+    <div class="comp-arr">↗</div>
+  </a>
+
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:var(--text3)"></div>Data / infrastructure</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--purple)"></div>Intelligence</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--teal)"></div>Traffic acquisition</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--coral)"></div>Landing page</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--blue)"></div>Form + conversion</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--amber)"></div>Feedback + governance</div>
+</div>
+<div class="pfoot"><p>Confidential — internal use only</p><div class="vbadge">v4.1 · 2025</div></div>
+</div>
+
+<!-- DETAIL PAGE -->
+<div id="dp" class="page">
+  <nav class="dp-nav">
+    <button class="dp-back" onclick="goBack()">
+      <svg viewBox="0 0 16 16"><polyline points="10,3 4,8 10,13"/></svg>
+      Back to overview
+    </button>
+    <div class="dp-crumb" id="dp-crumb"></div>
+  </nav>
+  <div id="dp-content"></div>
+</div>
+
+<script>
+const C={
+datalayer:{tag:'Data layer',tc:'gray',title:'Data layer & identity resolution',sub:'The unification layer everything else depends on. Matches leads to policies, stitches sessions, and resolves identity across every channel before any scoring or personalization occurs.',layout:'double',sections:[
+{t:'Why this layer exists',c:`<p class="dp-desc">Cerebro consumes three data sources — underwriting outcomes, customer LTV records, and ad platform signals. None share a common key. Without identity resolution, the same person appears as three separate records and Cerebro trains on noise.</p><div class="dp-note"><div class="dp-note-lbl">The core problem</div><p>A lead submits a form. That same person clicked a Meta ad two weeks ago, was a previous customer five years back, and called the call center last month. Without resolution, Cerebro sees four strangers instead of one high-value prospect.</p></div>`},
+{t:'What it does',c:`<ul class="dp-list"><li><strong>Identity stitching</strong> — matches leads to prior policies, ad clicks, and affiliate touchpoints via email, phone, device, and cookie graphs</li><li><strong>Deduplication</strong> — prevents the same lead being scored twice or attributed to multiple sources</li><li><strong>Feature store</strong> — maintains a real-time profile per identity with pre-computed features Cerebro reads at scoring time</li><li><strong>Session stitching</strong> — connects anonymous browsing sessions to known identities on form submission</li><li><strong>Cross-channel attribution</strong> — correctly assigns credit when a lead touches affiliate, paid, and organic before converting</li></ul><div class="dp-note dp-sp"><div class="dp-note-lbl">Feature store note</div><p>Pre-computed features are what make Cerebro fast at inference. Features are served from a low-latency store rather than recomputed on every lead — enabling real-time personalization on the landing page and form.</p></div>`}
+],connections:['Cerebro','Apollo','Dynamic landing page','Dynamic form']},
+
+cerebro:{tag:'Intelligence',tc:'purple',title:'Cerebro',sub:'The central scoring and segmentation model. Fuses underwriting outcomes, LTV history, and ad signals into a predictive score for every incoming lead — before they interact with anything.',layout:'double',sections:[
+{t:'What it does',c:`<p class="dp-desc">Cerebro is the brain of the acquisition stack. It takes the unified customer record from the data layer and produces a lead quality score plus predictive variables that every downstream system acts on. Bid modifiers, affiliate RPL, page personalization, and form length are all functions of Cerebro's output.</p><div class="dp-metrics"><div class="dp-metric"><div class="dp-metric-val">3</div><div class="dp-metric-lbl">Core data inputs</div></div><div class="dp-metric"><div class="dp-metric-val">4+</div><div class="dp-metric-lbl">Systems it feeds</div></div></div><div class="dp-note dp-sp"><div class="dp-note-lbl">The feedback loop</div><p>LTV and bind outcomes from the LMS return to Cerebro continuously. The model retrains on real policy outcomes — not proxy engagement signals. It becomes measurably more accurate with every completed funnel.</p></div>`},
+{t:'Inputs & outputs',c:`<p class="dp-desc" style="margin-bottom:10px"><strong>Inputs</strong> (via data layer):</p><ul class="dp-list"><li>Underwriting outcomes — bind rate, LTV, decline patterns</li><li>Customer LTV records matched to original acquisition signals</li><li>Ad platform signals — audience, intent, creative performance</li></ul><div class="dp-sp"><p class="dp-desc" style="margin-bottom:10px"><strong>Outputs:</strong></p><ul class="dp-list"><li>Lead quality score per incoming visitor</li><li>Predictive variables: age band, time of day, geography, source</li><li>RPL multiplier signals → Apollo</li><li>Bid modifier weights → Bidding engine (per platform)</li><li>Personalization signals → Landing page + form</li><li>Routing priority → LMS agent assignment</li></ul></div>`}
+],connections:['Data layer','Apollo','Bidding engine','Dynamic landing page','Dynamic form','LMS']},
+
+apollo:{tag:'Traffic acquisition',tc:'teal',title:'Apollo',sub:"Affiliate performance management system. Uses Cerebro's predictive variables to set dynamic RPL payouts — creating a market incentive for affiliates to optimize toward high-value lead profiles automatically.",layout:'double',sections:[
+{t:'The core mechanic',c:`<p class="dp-desc">Apollo doesn't tell affiliates how to source traffic. Instead it creates a price signal: leads matching Cerebro's high-value profile pay more per lead. Affiliates who deliver those leads earn more. Quality optimization happens through incentive, not mandate.</p><div class="dp-note"><div class="dp-note-lbl">Why this works</div><p>Traditional affiliate programs pay flat CPL — affiliates optimize for volume. Apollo pays variable RPL based on predicted quality, so affiliates optimize for the same variables Cerebro values. Interests align automatically.</p></div>`},
+{t:'RPL incentive variables',c:`<ul class="dp-list"><li><strong>Time of day</strong> — Monday morning leads get worked within business hours; worth more than Friday night leads that age over the weekend</li><li><strong>Age band</strong> — 60yr+ prospects have higher expected LTV for life coverage; RPL reflects this</li><li><strong>Geographic signals</strong> — state-level LTV variation from underwriting outcomes feeds RPL tiers</li><li><strong>Source quality history</strong> — per-affiliate bind rate track record adjusts baseline RPL tier</li><li><strong>Lead freshness</strong> — time elapsed since first intent signal affects contact rate probability</li></ul><div class="dp-note dp-sp"><div class="dp-note-lbl">Also feeds</div><p>Apollo source context flows into the dynamic form — pre-populating or skipping fields already inferred from the affiliate's known traffic profile.</p></div>`}
+],connections:['Cerebro','Affiliate channels','Dynamic form']},
+
+bidding:{tag:'Traffic acquisition',tc:'teal',title:'Bidding engine',sub:"Translates Cerebro's predictive variables into platform-specific bid modifiers for paid media. Configured independently per channel because each platform exposes different targeting levers.",layout:'double',sections:[
+{t:'Why per-platform matters',c:`<p class="dp-desc">A single universal bid model applied across Meta, Google, and Native consistently underperforms. Meta optimizes on social signals. Google on keyword intent. Native on contextual relevance. The variables that predict LTV on each platform differ — the bid logic needs to reflect that.</p><div class="dp-note"><div class="dp-note-lbl">The goal</div><p>Bid aggressively on segments Cerebro predicts will produce high-LTV leads. Pull back automatically on lower-value audiences. No manual campaign reviews required.</p></div>`},
+{t:'Per-platform configuration',c:`<ul class="dp-list"><li><strong>Meta</strong> — demographic targeting, lookalike audiences built from high-LTV customer lists, interest segment overlays</li><li><strong>Google</strong> — keyword intent bidding, demographic bid adjustments, in-market audience modifiers</li><li><strong>Native (Taboola / Outbrain)</strong> — contextual topic targeting, behavioral interest modifiers, placement-level bid rules</li></ul><div class="dp-note dp-sp"><div class="dp-note-lbl">Offline conversion integration</div><p>Platform bid optimization is only as good as the conversion signal it receives. See Offline Conversion Sync for how policy outcomes feed back into platform-native optimization.</p></div>`}
+],connections:['Cerebro','Paid + owned channels','Offline conversion sync']},
+
+affiliate:{tag:'Traffic channel',tc:'gray',title:'Affiliate channels',sub:'Third-party partners who drive traffic in exchange for per-lead payouts managed by Apollo. Quality is enforced through the RPL price signal, not manual policing.',layout:'single',sections:[
+{t:'How it works',c:`<p class="dp-desc">Affiliates source traffic however they choose — search, social, email, content. Apollo pays them per lead, with the rate determined by how closely the lead matches Cerebro's high-value variable profile. This creates a self-regulating quality incentive: affiliates who learn to send better leads earn more without being told what to change.</p><div class="dp-note"><div class="dp-note-lbl">Quality mechanism</div><p>Low-quality sources see their RPL tier fall over time as bind rate history updates. High-quality sources see RPL rise. There's no black-and-white vendor management — the system calibrates continuously.</p></div><div class="dp-sp"><p class="dp-desc">All affiliate traffic lands on the dynamic landing page with source attribution passed through. Cerebro uses affiliate source as a scoring feature, so leads from proven sources are weighted appropriately at the form and LMS routing stages.</p></div>`}
+],connections:['Apollo','Dynamic landing page']},
+
+paid:{tag:'Traffic channel',tc:'gray',title:'Paid + owned channels',sub:'Company-owned paid media managed directly through the Bidding Engine. Traffic lands on the dynamic landing page with personalization signals already loaded.',layout:'single',sections:[
+{t:'Channel mix & mechanics',c:`<div class="dp-pills" style="margin-bottom:16px"><span class="dp-pill">Google Search</span><span class="dp-pill">Google Display</span><span class="dp-pill">Meta</span><span class="dp-pill">Instagram</span><span class="dp-pill">Taboola</span><span class="dp-pill">Outbrain</span><span class="dp-pill">Social organic</span></div><p class="dp-desc">Unlike affiliate channels, paid media spend and targeting are fully company-controlled. The Bidding Engine makes automated bid adjustments based on Cerebro's real-time scoring — no manual campaign reviews between optimization cycles.</p><div class="dp-note dp-sp"><div class="dp-note-lbl">vs. affiliate</div><p>Affiliate channels scale through partner relationships and RPL incentives. Paid channels scale through budget and bid optimization. Both feed the same funnel — the data layer handles attribution so Cerebro knows the source regardless of channel.</p></div>`}
+],connections:['Bidding engine','Dynamic landing page']},
+
+landing:{tag:'Funnel · step 1',tc:'coral',title:'Dynamic landing page',sub:"The first step of the two-step funnel. Brochureware — marketing content designed to qualify intent and drive a single action. Assembled dynamically to reflect what's already known about the visitor.",layout:'double',sections:[
+{t:'What the page is',c:`<p class="dp-desc">A dynamically assembled brochureware page with no navigation, no competing links, no distractions. The entire page exists to qualify intent and direct it toward one action: "Get Quote." Content is generated from NLP call center insights combined with existing seed pages, then adapted to the visitor's Cerebro profile.</p><div class="dp-note"><div class="dp-note-lbl">Content assembly</div><p>Copy and headlines are AI-generated from NLP insights extracted by the Data Works team from call center recordings, combined with structural templates from existing high-performing pages. This grounds generation in real customer language rather than marketing assumptions.</p></div>`},
+{t:'Page mechanics',c:`<ul class="dp-list"><li><strong>Multi-armed bandit A/B</strong> — continuously shifts traffic to better-performing variants in real time; no test cycles, no manual winner calls</li><li><strong>Personalization engine</strong> — adapts headlines, sub-copy, and layout to the visitor's Cerebro score and traffic source</li><li><strong>Bounce management</strong> — detects exit intent and triggers retention strategies: winback overlay, email capture, social proof injection</li><li><strong>Retargeting pixels</strong> — fire on page load and key behavioral events; build stratified audiences on Meta, Google, and Native for non-converting visitors</li></ul>`}
+],connections:['Dynamic form','Cerebro (personalization)','Retargeting → paid channels']},
+
+form:{tag:'Funnel · step 2',tc:'blue',title:'Dynamic form',sub:"The second step of the two-step funnel. A personalized survey assembled at render time. Fields, order, copy, and length adapt to what's already known about the lead.",layout:'double',sections:[
+{t:'What it is',c:`<p class="dp-desc">After clicking "Get Quote," the lead lands on a form that has already been personalized. Cerebro's score determines length and field priority. Apollo's source context pre-populates inferred demographics. Behavioral signals from the landing page adjust complexity for near-bounce visitors.</p><div class="dp-note"><div class="dp-note-lbl">Design principle</div><p>The form should feel like it already knows something about the person. Reduce friction for high-intent leads. Collect what underwriting needs without asking for what can already be inferred.</p></div>`},
+{t:'Personalization signals',c:`<ul class="dp-list"><li><strong>Cerebro score</strong> — high scores get a shorter form; lower scores get more depth to help underwriting</li><li><strong>Apollo source context</strong> — affiliate's known traffic profile pre-populates or skips inferred fields</li><li><strong>Landing page behavior</strong> — scroll depth and near-bounce signals adjust form complexity</li><li><strong>Age band</strong> — adjusts product framing, question tone, and coverage option presentation</li><li><strong>Conditional branching</strong> — follow-up questions only appear when relevant to prior answers</li><li><strong>Time of day</strong> — field sequencing adapts to optimize contact rate at the hour of submission</li></ul>`}
+],connections:['Cerebro','Apollo','Lead management system']},
+
+lms:{tag:'Conversion',tc:'blue',title:'Lead management system',sub:'The terminus of the martech stack and the origin of the feedback loop. Every completed lead enters with full attribution, scoring metadata, and behavioral context attached.',layout:'double',sections:[
+{t:'What it receives',c:`<p class="dp-desc">The form submission passes a complete lead package — not just form fields, but the full attribution and scoring context accumulated through the funnel.</p><ul class="dp-list dp-sp"><li>Form data — demographics, coverage intent, contact info</li><li>Cerebro lead quality score and predictive variables</li><li>Apollo source attribution and RPL tier</li><li>Traffic channel, campaign, and creative</li><li>Behavioral session signals from the landing page</li></ul>`},
+{t:'What it outputs',c:`<p class="dp-desc">The LMS routes leads to the right agent workflow based on Cerebro's routing priority, then tracks outcomes through the sales and underwriting process.</p><div class="dp-note dp-sp"><div class="dp-note-lbl">Feedback signals generated</div><p>Bind rate by source, segment, and channel · Issued premium and policy face amount · Contact rate and speed-to-contact · Policy lapse and churn over time. All return to Cerebro and the Offline Conversion Sync layer.</p></div>`}
+],connections:['Cerebro (feedback)','Offline conversion sync']},
+
+offlineconv:{tag:'Feedback',tc:'amber',title:'Offline conversion sync',sub:'Feeds real policy outcomes back to Meta and Google — so platform-native optimization learns from issued policies, not just form fills.',layout:'double',sections:[
+{t:'Why this matters',c:`<p class="dp-desc">Without offline conversion sync, Meta and Google optimize for the last event they can see: typically a form submission. They have no idea whether those form fills became policies — so their algorithms find more people who fill out forms, not more people who buy coverage.</p><div class="dp-note"><div class="dp-note-lbl">The ROI case</div><p>This is one of the highest-return additions to the stack. Competitors without CAPI are training Meta's algorithm on the wrong objective. You're training it on bind rate and issued premium. Over time, the platform's lookalike models drift in fundamentally different directions.</p></div>`},
+{t:'How it works',c:`<ul class="dp-list"><li><strong>Meta CAPI</strong> — sends server-side conversion events (policy issued, premium amount) directly to Meta, bypassing signal loss from ad blockers and iOS privacy changes</li><li><strong>Google Enhanced Conversions</strong> — matches hashed customer data to Google's identity graph; sends policy issuance as an offline conversion event</li><li><strong>Value-based bidding</strong> — once platforms receive policy value, you can shift from target CPA to target ROAS — optimizing for issued premium per dollar spent</li><li><strong>Feedback latency handling</strong> — policy issuance lags form submission by days to weeks; the sync layer manages the timing mismatch</li></ul>`}
+],connections:['LMS','Bidding engine','Meta / Google platforms']},
+
+compliance:{tag:'Governance',tc:'amber',title:'Compliance & governance',sub:"A cross-cutting layer that touches every component. In life insurance, compliance isn't a post-launch checklist — it's an architectural constraint that needs to be designed in from the start.",layout:'double',sections:[
+{t:"Why it's architectural",c:`<p class="dp-desc">TCPA consent requirements affect how leads are captured. CCPA affects what data you store and how. Model fairness requirements affect whether Cerebro can use certain variables and how. These constraints need to be built in from the start — not bolted on after an enforcement action.</p><div class="dp-note"><div class="dp-note-lbl">The risk framing</div><p>A single TCPA violation costs $500–$1,500 per call. At scale, a consent management gap isn't a legal problem — it's an existential one. This layer is far cheaper to build correctly than to remediate.</p></div>`},
+{t:'Key compliance areas',c:`<ul class="dp-list"><li><strong>TCPA consent</strong> — explicit, documented consent to contact must be captured at data collection and stored with every lead record in the LMS</li><li><strong>CCPA / data privacy</strong> — right to deletion, data use disclosure, and opt-out flows must be built into the data layer and LMS</li><li><strong>Ad compliance</strong> — life insurance advertising has disclosure requirements that vary by state; dynamic landing pages must handle these even when content is personalized</li><li><strong>Model fairness</strong> — using age in Cerebro's scoring is permissible for underwriting but must be documented; using it to suppress leads unrelated to underwriting is a different matter</li><li><strong>Disclosure requirements</strong> — required disclosures must appear on the dynamic form at the right moment, even when field order is adjusted by the personalization engine</li></ul>`}
+],connections:['Data layer','Cerebro','Dynamic landing page','Dynamic form','LMS']}
+};
+
+let hist=[];
+
+function switchPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tnav-tab').forEach((t,i) => {
+    const ids = ['cover','ov','phases'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+  window.scrollTo(0,0);
+  hist = [];
+}
+
+function nav(id){const c=C[id];if(!c)return;hist.push(id);render(c);document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('dp').classList.add('active');document.querySelectorAll('.tnav-tab').forEach(t=>t.classList.remove('active'));window.scrollTo(0,0)}
+function goBack(){hist.pop();if(hist.length===0){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('ov').classList.add('active');document.querySelectorAll('.tnav-tab').forEach((t,i)=>t.classList.toggle('active',i===1));window.scrollTo(0,0)}else{const p=hist[hist.length-1];hist.pop();nav(p)}}
+function render(c){
+  document.getElementById('dp-crumb').textContent=c.tag+' · '+c.title;
+  const bc=c.layout==='single'?'dp-body single':'dp-body';
+  const secs=c.sections.map(s=>`<div class="dp-section"><div class="dp-sec-title">${s.t}</div>${s.c}</div>`).join('');
+  const conns=c.connections?`<div class="dp-conns"><span class="dp-conn-lbl">Connects to</span>${c.connections.map(cn=>`<span class="dp-conn-pill">${cn}</span>`).join('')}</div>`:'';
+  document.getElementById('dp-content').innerHTML=`<div class="dp-hero"><div class="dp-tag ${c.tc}">${c.tag}</div><h2>${c.title}</h2><p class="dp-hero-sub">${c.sub}</p></div><div class="${bc}">${secs}</div>${conns}`;
+}
+</script>
+
+<!-- ════════════════════════════════════════
+     ASK CLAUDE WIDGET
+════════════════════════════════════════ -->
+<style>
+#claude-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 11px 18px 11px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(78,64,196,.35), 0 1px 4px rgba(0,0,0,.12);
+  transition: transform .15s, box-shadow .15s, background .15s;
+  letter-spacing: .01em;
+}
+#claude-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(78,64,196,.45), 0 2px 6px rgba(0,0,0,.14);
+  background: #3d32a8;
+}
+#claude-btn .cb-icon {
+  width: 22px; height: 22px;
+  background: rgba(255,255,255,.18);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+#claude-btn .cb-icon svg { width: 12px; height: 12px; fill: #fff; }
+
+/* DRAWER */
+#claude-drawer {
+  position: fixed;
+  bottom: 0; right: 0;
+  width: 380px;
+  max-width: 100vw;
+  height: 560px;
+  max-height: 90vh;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 32px rgba(0,0,0,.12), 0 -1px 8px rgba(0,0,0,.06);
+  transform: translateY(110%);
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+#claude-drawer.open { transform: translateY(0); }
+
+.cw-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 13px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  background: var(--surface);
+}
+.cw-head-left { display: flex; align-items: center; gap: 9px; }
+.cw-avatar {
+  width: 28px; height: 28px;
+  background: var(--purple-bg);
+  border: 1px solid var(--purple-br);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.cw-avatar svg { width: 14px; height: 14px; fill: var(--purple); }
+.cw-head-title { font-size: 13px; font-weight: 500; color: var(--text); }
+.cw-head-sub { font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; margin-top: 1px; }
+.cw-close {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text2);
+  transition: background .13s, color .13s;
+  flex-shrink: 0;
+}
+.cw-close:hover { background: var(--border); color: var(--text); }
+
+/* MESSAGES */
+.cw-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scroll-behavior: smooth;
+}
+.cw-messages::-webkit-scrollbar { width: 4px; }
+.cw-messages::-webkit-scrollbar-track { background: transparent; }
+.cw-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 88%;
+}
+.msg.user { align-self: flex-end; align-items: flex-end; }
+.msg.assistant { align-self: flex-start; align-items: flex-start; }
+
+.msg-bubble {
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.msg.user .msg-bubble {
+  background: var(--purple);
+  color: #fff;
+  border-radius: 14px 14px 4px 14px;
+}
+.msg.assistant .msg-bubble {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 14px 14px 14px 4px;
+}
+.msg.assistant .msg-bubble p { margin-bottom: 6px; }
+.msg.assistant .msg-bubble p:last-child { margin-bottom: 0; }
+.msg.assistant .msg-bubble strong { font-weight: 500; color: var(--text); }
+.msg.assistant .msg-bubble ul { padding-left: 16px; margin: 4px 0; }
+.msg.assistant .msg-bubble li { margin-bottom: 3px; }
+
+/* typing indicator */
+.typing-dots {
+  display: flex;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px 14px 14px 4px;
+  align-self: flex-start;
+}
+.typing-dots span {
+  width: 6px; height: 6px;
+  background: var(--text3);
+  border-radius: 50%;
+  animation: dot-bounce .9s ease-in-out infinite;
+}
+.typing-dots span:nth-child(2) { animation-delay: .18s; }
+.typing-dots span:nth-child(3) { animation-delay: .36s; }
+@keyframes dot-bounce {
+  0%,60%,100% { transform: translateY(0); }
+  30% { transform: translateY(-5px); }
+}
+
+/* SUGGESTED QUESTIONS */
+.cw-suggestions {
+  padding: 0 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+}
+.cw-suggestion {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 11px;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .13s, color .13s, background .13s;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.4;
+}
+.cw-suggestion:hover { border-color: var(--purple-br); color: var(--purple-tx); background: var(--purple-bg); }
+
+/* INPUT */
+.cw-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+#cw-input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  background: var(--surface2);
+  outline: none;
+  resize: none;
+  line-height: 1.5;
+  max-height: 100px;
+  transition: border-color .14s;
+}
+#cw-input:focus { border-color: var(--purple-br); }
+#cw-input::placeholder { color: var(--text3); }
+#cw-send {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  background: var(--purple);
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  align-self: flex-end;
+  transition: background .13s, transform .1s;
+}
+#cw-send:hover { background: #3d32a8; transform: scale(1.04); }
+#cw-send:disabled { background: var(--border); cursor: default; transform: none; }
+#cw-send svg { width: 15px; height: 15px; fill: #fff; }
+
+/* API KEY SETUP */
+.cw-setup {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  gap: 12px;
+  text-align: center;
+}
+.cw-setup-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.cw-setup-sub { font-size: 12px; color: var(--text2); line-height: 1.65; max-width: 280px; }
+.cw-setup-sub a { color: var(--purple); text-decoration: none; }
+.cw-setup-sub a:hover { text-decoration: underline; }
+#cw-key-input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 10px 13px;
+  font-size: 13px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text);
+  background: var(--surface2);
+  outline: none;
+  transition: border-color .14s;
+  letter-spacing: .04em;
+}
+#cw-key-input:focus { border-color: var(--purple-br); }
+#cw-key-input::placeholder { color: var(--text3); letter-spacing: 0; font-family: 'DM Sans', sans-serif; }
+#cw-key-save {
+  width: 100%;
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background .13s;
+}
+#cw-key-save:hover { background: #3d32a8; }
+.cw-key-note { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; }
+</style>
+
+<!-- Floating button -->
+<button id="claude-btn" onclick="toggleDrawer()">
+  <div class="cb-icon">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+  </div>
+  Ask Claude
+</button>
+
+<!-- Chat drawer -->
+<div id="claude-drawer">
+  <div class="cw-head">
+    <div class="cw-head-left">
+      <div class="cw-avatar">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 3a3 3 0 110 6 3 3 0 010-6zm0 14.2a7.2 7.2 0 01-6-3.22c.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08a7.2 7.2 0 01-6 3.22z"/></svg>
+      </div>
+      <div>
+        <div class="cw-head-title">Ask Claude</div>
+        <div class="cw-head-sub">Ask anything about this platform</div>
+      </div>
+    </div>
+    <button class="cw-close" onclick="toggleDrawer()">✕</button>
+  </div>
+  <div id="cw-body-container" style="flex:1;display:flex;flex-direction:column;overflow:hidden"></div>
+  <div class="cw-input-row" id="cw-input-row" style="display:none">
+    <textarea id="cw-input" rows="1" placeholder="Ask about the architecture…" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button id="cw-send" onclick="sendMsg()">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are an expert assistant helping users understand a closed-loop martech acquisition platform built for a life insurance company. You have deep knowledge of every component in the stack:
+
+- Data layer & identity resolution: unifies customer records, sessions, ad signals; feature store for Cerebro
+- Cerebro: central lead scoring + segmentation model; fuses underwriting outcomes, LTV data, ad platform signals; outputs RPL multipliers, bid modifiers, personalization signals
+- Apollo: affiliate performance management; dynamic RPL payouts based on Cerebro's predictive variables (time of day, age band, geography, source quality)
+- Bidding engine: per-platform bid modifiers for Meta, Google, Native based on Cerebro's output
+- Affiliate channels: RPL-incentivized third-party partners
+- Paid + owned channels: Google, Meta, Native, Social — managed via bidding engine
+- Dynamic landing page (funnel step 1): AI-assembled brochureware with multi-armed bandit A/B testing, personalization engine, bounce management, and retargeting pixels. Single CTA: Get Quote.
+- Dynamic form (funnel step 2): personalized survey assembled at render time using Cerebro score, Apollo source context, and session behavior. Adapts field order, pre-populates data, conditional branching.
+- Lead management system (LMS): routes leads, manages call center workflows, tracks policy conversion; generates feedback signals
+- Offline conversion sync: feeds bind rate and issued premium back to Meta CAPI and Google Enhanced Conversions for value-based bidding optimization
+- Compliance & governance: TCPA consent, CCPA, ad compliance, model fairness, disclosure requirements
+
+The feedback loop: LTV and conversion outcomes from the LMS flow back to Cerebro continuously, retraining the model on real policy outcomes.
+
+Keep answers concise, direct, and practical. When asked about technical details, be specific. When asked about strategy, connect it to life insurance business outcomes (bind rate, LTV, issued premium). Use plain language — this audience includes both C-suite executives and developers.
+
+If a question is not related to this martech platform or life insurance acquisition, politely decline and redirect the user to ask about the platform instead.
+
+If a question is not related to this martech platform or life insurance acquisition, politely decline and redirect the user to ask about the platform instead.`;
+
+let messages = [];
+let loading = false;
+
+const drawer = document.getElementById('claude-drawer');
+const bodyContainer = document.getElementById('cw-body-container');
+const inputRow = document.getElementById('cw-input-row');
+
+const SUGGESTIONS = [
+  "How does Cerebro actually improve over time?",
+  "Why does the offline conversion sync matter so much?",
+  "What makes Apollo different from a standard affiliate program?",
+  "How is the dynamic form personalized?",
+  "What's the role of the data layer vs Cerebro?"
+];
+
+function toggleDrawer() {
+  const isOpen = drawer.classList.toggle('open');
+  if (isOpen && bodyContainer.innerHTML === '') initWidget();
+}
+
+function initWidget() {
+  showChat();
+}
+
+function showChat() {
+  inputRow.style.display = 'flex';
+  const hasMsgs = messages.length > 0;
+  bodyContainer.innerHTML = `
+    <div class="cw-messages" id="cw-messages">
+      ${hasMsgs ? renderMessages() : renderWelcome()}
+    </div>
+    ${!hasMsgs ? `<div class="cw-suggestions" id="cw-suggestions">
+      ${SUGGESTIONS.map(s => `<button class="cw-suggestion" onclick="sendSuggestion(this)">${s}</button>`).join('')}
+    </div>` : ''}
+  `;
+  scrollToBottom();
+  setTimeout(() => document.getElementById('cw-input') && document.getElementById('cw-input').focus(), 100);
+}
+
+function renderWelcome() {
+  return `<div class="msg assistant"><div class="msg-bubble">Hi — I have full context on this martech stack. Ask me anything about how the components work, how they connect, or how to think about building or prioritizing them.</div></div>`;
+}
+
+function renderMessages() {
+  return messages.map(m => `
+    <div class="msg ${m.role}">
+      <div class="msg-bubble">${m.role === 'assistant' ? formatMarkdown(m.content) : escHtml(m.content)}</div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function formatMarkdown(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/`([^`]+)`/g,'<code style="background:var(--border);padding:1px 5px;border-radius:4px;font-family:DM Mono,monospace;font-size:11px">$1</code>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/\n- /g,'<br>• ')
+    .replace(/^/,'<p>').replace(/$/,'</p>');
+}
+
+function sendSuggestion(btn) {
+  const text = btn.textContent;
+  const sugg = document.getElementById('cw-suggestions');
+  if (sugg) sugg.remove();
+  doSend(text);
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+}
+
+function sendMsg() {
+  const inp = document.getElementById('cw-input');
+  if (!inp) return;
+  const text = inp.value.trim();
+  if (!text || loading) return;
+  inp.value = '';
+  autoResize(inp);
+  doSend(text);
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
+
+function doSend(text) {
+  messages.push({ role: 'user', content: text });
+  const sugg = document.getElementById('cw-suggestions');
+  if (sugg) sugg.remove();
+  appendMsg('user', text);
+  showTyping();
+  callClaude();
+}
+
+function appendMsg(role, content) {
+  const container = document.getElementById('cw-messages');
+  if (!container) return;
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `<div class="msg-bubble">${role === 'assistant' ? formatMarkdown(content) : escHtml(content)}</div>`;
+  container.appendChild(div);
+  scrollToBottom();
+}
+
+function showTyping() {
+  loading = true;
+  const send = document.getElementById('cw-send');
+  if (send) send.disabled = true;
+  const container = document.getElementById('cw-messages');
+  if (!container) return;
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.id = 'typing-indicator';
+  dots.innerHTML = '<span></span><span></span><span></span>';
+  container.appendChild(dots);
+  scrollToBottom();
+}
+
+function hideTyping() {
+  const dots = document.getElementById('typing-indicator');
+  if (dots) dots.remove();
+  loading = false;
+  const send = document.getElementById('cw-send');
+  if (send) send.disabled = false;
+}
+
+function scrollToBottom() {
+  const container = document.getElementById('cw-messages');
+  if (container) container.scrollTop = container.scrollHeight;
+}
+
+async function callClaude() {
+  try {
+    const res = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        system: SYSTEM_PROMPT,
+        messages: messages.map(m => ({ role: m.role, content: m.content }))
+      })
+    });
+
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Sorry, I couldn\'t get a response. Please try again.';
+    hideTyping();
+    messages.push({ role: 'assistant', content: reply });
+    appendMsg('assistant', reply);
+  } catch (err) {
+    hideTyping();
+    appendMsg('assistant', 'Connection error — please try again.');
+    console.error(err);
+  }
+}
+</script>
+</body>
+</html>
