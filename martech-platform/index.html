@@ -61,6 +61,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .node.amber{background:var(--amber-bg);border-color:var(--amber-br)}.node.amber .node-title{color:var(--amber-tx)}.node.amber:hover{border-color:var(--amber)}
 .node.gray:hover{border-color:var(--border-hi);background:var(--surface2)}
 
+/* TODAY BADGE */
+.today{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-family:"DM Mono",monospace;font-size:10px;color:var(--teal-tx);background:var(--teal-bg);border:1px solid var(--teal-br);border-radius:20px;padding:1px 8px;line-height:1.6}
+.today::before{content:"";display:block;width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.today-none{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-family:"DM Mono",monospace;font-size:10px;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:1px 8px;line-height:1.6}
+.today-none::before{content:"";display:block;width:5px;height:5px;border-radius:50%;background:var(--border-hi);flex-shrink:0}
+
 /* FUNNEL CARD */
 .fcard{width:100%;border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;background:var(--surface);cursor:pointer;transition:box-shadow .16s,transform .12s,border-color .14s;position:relative;display:block;text-decoration:none;box-shadow:var(--sh)}
 .fcard:hover{transform:translateY(-2px);box-shadow:var(--sh-hover)}
@@ -695,6 +701,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="node gray" onclick="nav('datalayer')">
         <div class="node-title">Data layer &amp; identity resolution</div>
         <div class="node-sub">Unifies customer records, sessions, and ad signals before scoring</div>
+        <span class="today-none">not built yet</span>
         <span class="node-arr">↗</span>
       </div>
     </div>
@@ -708,6 +715,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="node purple" style="max-width:360px" onclick="nav('cerebro')">
         <div class="node-title">Cerebro — lead scoring + segmentation</div>
         <div class="node-sub">Predictive model · LTV estimation · signal fusion</div>
+        <span class="today-none">not built yet</span>
         <span class="node-arr">↗</span>
       </div>
     </div>
@@ -721,11 +729,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="node teal" onclick="nav('apollo')">
         <div class="node-title">Apollo</div>
         <div class="node-sub">Affiliate mgmt · dynamic RPL by variable</div>
+        <span class="today">Apollo/Lovable today</span>
         <span class="node-arr">↗</span>
       </div>
       <div class="node teal" onclick="nav('bidding')">
         <div class="node-title">Bidding engine</div>
         <div class="node-sub">Per-platform bid modifiers</div>
+        <span class="today-none">not built yet</span>
         <span class="node-arr">↗</span>
       </div>
     </div>
@@ -739,11 +749,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="node gray" onclick="nav('affiliate')">
         <div class="node-title">Affiliate channels</div>
         <div class="node-sub">RPL-incentivized partners</div>
+        <span class="today">live today</span>
         <span class="node-arr">↗</span>
       </div>
       <div class="node gray" onclick="nav('paid')">
         <div class="node-title">Paid + owned channels</div>
         <div class="node-sub">Google · Meta · Native · Social</div>
+        <span class="today">live today</span>
         <span class="node-arr">↗</span>
       </div>
     </div>
@@ -757,6 +769,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="fcard-step">Funnel · step 1</div>
       <div class="fcard-title">Dynamic landing page</div>
       <div class="fcard-desc">AI-assembled brochureware, personalized to the visitor. Single CTA: "Get Quote."</div>
+      <span class="today">Heyflow today</span>
       <div class="fcard-tags">
         <span class="ftag">AI content</span><span class="ftag">A/B bandit</span><span class="ftag">bounce management</span><span class="ftag">retargeting pixels</span><span class="ftag">personalization</span>
       </div>
@@ -775,6 +788,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="fcard-step">Funnel · step 2</div>
       <div class="fcard-title">Dynamic form</div>
       <div class="fcard-desc">Personalized survey assembled at render time from Cerebro score, Apollo context, and session behavior.</div>
+      <span class="today">Heyflow today</span>
       <div class="fcard-tags">
         <span class="ftag">Cerebro score</span><span class="ftag">Apollo context</span><span class="ftag">pre-population</span><span class="ftag">conditional branching</span>
       </div>
@@ -789,11 +803,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       <div class="node blue" onclick="nav('lms')">
         <div class="node-title">Lead management system</div>
         <div class="node-sub">Routing · workflows · policy conversion</div>
+        <span class="today">Apollo Lead API + GetNext today</span>
         <span class="node-arr">↗</span>
       </div>
       <div class="node amber" onclick="nav('offlineconv')">
         <div class="node-title">Offline conversion sync</div>
         <div class="node-sub">Policy outcomes → Meta CAPI · Google</div>
+        <span class="today">CAPI live · GEC in progress</span>
         <span class="node-arr">↗</span>
       </div>
     </div>
@@ -825,6 +841,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="leg"><div class="leg-dot" style="background:var(--coral)"></div>Landing page</div>
   <div class="leg"><div class="leg-dot" style="background:var(--blue)"></div>Form + conversion</div>
   <div class="leg"><div class="leg-dot" style="background:var(--amber)"></div>Feedback + governance</div>
+  <div class="leg"><div style="width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0"></div>Live today</div>
+  <div class="leg"><div style="width:7px;height:7px;border-radius:50%;background:var(--border-hi);flex-shrink:0"></div>Not built yet</div>
 </div>
 <div class="pfoot"><p>Confidential — internal use only</p><div class="vbadge">v4.1 · 2025</div></div>
 </div>
@@ -1227,25 +1245,39 @@ function render(c){
 </div>
 
 <script>
-const SYSTEM_PROMPT = `You are an expert assistant helping users understand a closed-loop martech acquisition platform built for a life insurance company. You have deep knowledge of every component in the stack:
+const SYSTEM_PROMPT = `You are an expert assistant helping users understand the martech acquisition platform for Neilson — a life insurance company. You understand both the TARGET architecture (what is being built) and the CURRENT STATE (what exists today).
 
+CURRENT STATE (what exists today):
+- Landing pages: Heyflow is the current funnel platform. Canada live, UK going live, ANZ imminent. Basic A/B testing via Heyflow native tools, migrating to Webflow Optimize.
+- Lead API: Unified Lead API (Apollo API) replaces legacy DataLead and QuoteRequest services. MVP stage — appointment setting and post-lead enrichment not yet implemented.
+- Affiliate CRM: Apollo (built on Lovable) is the affiliate commercial system of record — partner data, rate cards, billing. Currently prototype-grade and manually operated.
+- Lead routing: GetNext/Omega routes validated leads to call centres. Omega re-harvest triggers not implemented.
+- Attribution: Meta CAPI owned by DataWorks. Google Enhanced Conversions owned by TechLabs, currently being stabilised.
+- Tracking: UTM + Partner ID for new partners. Legacy Ref Codes still active alongside new system.
+- Reporting: Foundations only. No dashboards or alerting yet.
+- No Cerebro equivalent exists yet. No identity resolution layer. No predictive scoring model.
+
+TARGET ARCHITECTURE (what is being designed):
 - Data layer & identity resolution: unifies customer records, sessions, ad signals; feature store for Cerebro
 - Cerebro: central lead scoring + segmentation model; fuses underwriting outcomes, LTV data, ad platform signals; outputs RPL multipliers, bid modifiers, personalization signals
-- Apollo: affiliate performance management; dynamic RPL payouts based on Cerebro's predictive variables (time of day, age band, geography, source quality)
-- Bidding engine: per-platform bid modifiers for Meta, Google, Native based on Cerebro's output
-- Affiliate channels: RPL-incentivized third-party partners
-- Paid + owned channels: Google, Meta, Native, Social — managed via bidding engine
-- Dynamic landing page (funnel step 1): AI-assembled brochureware with multi-armed bandit A/B testing, personalization engine, bounce management, and retargeting pixels. Single CTA: Get Quote.
-- Dynamic form (funnel step 2): personalized survey assembled at render time using Cerebro score, Apollo source context, and session behavior. Adapts field order, pre-populates data, conditional branching.
-- Lead management system (LMS): routes leads, manages call center workflows, tracks policy conversion; generates feedback signals
-- Offline conversion sync: feeds bind rate and issued premium back to Meta CAPI and Google Enhanced Conversions for value-based bidding optimization
-- Compliance & governance: TCPA consent, CCPA, ad compliance, model fairness, disclosure requirements
+- Apollo (evolved): affiliate performance management with dynamic RPL payouts based on Cerebro predictive variables (time of day, age band, geography, source quality)
+- Bidding engine: per-platform bid modifiers for Meta, Google, Native based on Cerebro output
+- Dynamic landing page (funnel step 1): AI-assembled brochureware with multi-armed bandit A/B testing, personalization engine, bounce management, retargeting pixels. Single CTA: Get Quote. Currently served by Heyflow.
+- Dynamic form (funnel step 2): personalized survey assembled at render time using Cerebro score, Apollo context, session behavior. Currently served by Heyflow.
+- Lead management system: Apollo Lead API + GetNext/Omega today, evolving to full outcome tracking
+- Offline conversion sync: CAPI live (DataWorks), Google Enhanced Conversions in progress (TechLabs); target is value-based bidding on issued premium
+- Compliance & governance: TCPA, CCPA, ad compliance, model fairness
+
+KEY TENSIONS from the current MarTech review:
+- Heyflow gives speed but trades control — as personalisation needs grow, this dependency becomes more material
+- Apollo/Lovable scalability ceiling is an open question — fast operationalisation may defer a harder rebuild
+- API hardening (geo schema, appointment setting) vs geo expansion pressure
+- TechLabs, DataWorks, and Marketing have overlapping responsibilities — attribution and funnel ownership span multiple teams
+- MVP shortcuts are in production: environment separation incomplete, Apollo prototype-grade, Lead API schema Canada-only
 
 The feedback loop: LTV and conversion outcomes from the LMS flow back to Cerebro continuously, retraining the model on real policy outcomes.
 
-Keep answers concise, direct, and practical. When asked about technical details, be specific. When asked about strategy, connect it to life insurance business outcomes (bind rate, LTV, issued premium). Use plain language — this audience includes both C-suite executives and developers.
-
-If a question is not related to this martech platform or life insurance acquisition, politely decline and redirect the user to ask about the platform instead.
+Keep answers concise, direct, and practical. When asked about current state vs target, be clear about which you are describing. When asked about strategy, connect it to life insurance business outcomes (bind rate, LTV, issued premium). Use plain language — this audience includes both C-suite executives and developers.
 
 If a question is not related to this martech platform or life insurance acquisition, politely decline and redirect the user to ask about the platform instead.`;
 
@@ -1388,7 +1420,7 @@ function scrollToBottom() {
 
 async function callClaude() {
   try {
-    const res = await fetch('/.netlify/functions/claude', {
+    const res = await fetch('/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
